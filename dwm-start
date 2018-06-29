@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+while true; do
+    $HOME/.cloud/scripts/dwm-status
+    sleep 2
+done &
+
+while true; do
+	  dwm >/dev/null
+	  # to log stderrors to a file
+	  #dwm 2> ~/.dwm.log
+done

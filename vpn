@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# vpn activation
+
+on() {
+    nmcli con up BC
+}
+
+off() {
+    nmcli con down BC
+}
+
+status() {
+    nmcli con show --active | grep 'vpn'
+}
+
+toggle() {
+    vpn="$(status)"
+    if [[ $vpn ]]; then
+        off
+    else
+        on
+    fi
+}
+
+if [[ $1 = on ]]; then
+    on
+elif [[ $1 = off ]]; then
+    off
+elif [[ $1 = toggle ]]; then
+    toggle
+elif [[ $1 = status ]]; then
+    status
+fi
+

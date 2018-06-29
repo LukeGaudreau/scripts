@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+displayctl menu | rofi -dmenu -p "Display Modes" | displayctl
+hsetroot -cover ~/.cloud/Pictures/Wallpapers/colortiles.jpg

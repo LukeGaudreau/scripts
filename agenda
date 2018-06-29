@@ -1,0 +1,3 @@
+#!/bin/bash
+notify-send "Work" "$(gcalcli --nocolor --configFolder ~/.config/gcalcli/bc agenda)"
+notify-send "Personal" "$(gcalcli --nocolor --configFolder ~/.config/gcalcli/gmail agenda)"

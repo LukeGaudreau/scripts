@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+
+require 'xrandr'
+
+OPTIONS = ['menu', 'span', 'mirror', 'solo']
+class Screen
+
+  attr_reader :int_scale, :ext_scale
+  def initialize
+    @xrandr = Xrandr::Control.new
+    @displays = @xrandr.connected_outputs
+    @int_scale = 1
+    @ext_scale = 1.5
+  end
+
+  def internal
+    @displays[0]
+  end
+
+  def external
+    @displays[1]
+  end
+
+  def external_name
+    external.name
+  end
+
+  def offset
+    (external.preferred.resolution.width * ext_scale).round
+  end
+
+
+  def span_size
+    "#{(offset + internal.preferred.resolution.width)}x#{[internal.preferred.resolution.height, (external.preferred.resolution.height * ext_scale).round].max}"
+  end
+
+  def common_res
+    ext_res = []
+    int_res = []
+    for e in external.modes
+      ext_res.push(e.resolution.to_s)
+    end
+    for i in internal.modes
+      int_res.push(i.resolution.to_s)
+    end
+    Xrandr::Resolution.new((int_res & ext_res)[0])
+  end
+
+  def span
+    if external.nil?
+      puts "No external display connected."
+      solo
+    else
+      puts "Spanning displays #{internal.name} and #{external.name}."
+      @xrandr.configure(internal.name, scale: "#{int_scale}x#{int_scale}", primary: true, mode: "#{internal.preferred.resolution}", pos: "#{offset}x0")
+      @xrandr.configure(external.name, scale: "#{ext_scale}x#{ext_scale}", auto: true, pos: "0x0", fb: span_size)
+      @xrandr.apply!
+    end
+  end
+
+  def mirror
+    if external.nil?
+      puts "No external display connected."
+      solo
+    else
+      @xrandr.configure(internal.name, scale: "1x1", mode: "#{common_res}", pos: "#{common_res.width}x0")
+      @xrandr.configure(external.name, scale: "1x1", mode: "#{common_res}", pos: "0x0", fb: "#{(common_res.width)}x#{common_res.height} --same-as #{internal.name}")
+      puts "Mirroring displays #{internal.name} and #{external.name}."
+      @xrandr.apply!
+    end
+  end
+
+  def solo
+    @xrandr.configure(nil, auto: true)
+    puts "Running in solo mode."
+    @xrandr.apply!
+  end
+
+  def menu
+    puts OPTIONS.drop(1)
+  end
+
+end
+
+unless ARGV.empty?
+  command = ARGV.shift
+  if OPTIONS.include? command
+    s = Screen.new
+    s.send(command)
+  end
+end
+
+if not STDIN.tty? and not STDIN.closed?
+  command = ARGF.readline.strip
+  if OPTIONS.include? command
+    s = Screen.new
+    s.send(command)
+  end
+end

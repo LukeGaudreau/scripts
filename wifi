@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# wifi activation
+
+status() {
+    nmcli -f NAME con show --active | grep -v "NAME\|BC" | head -n1
+}
+
+# toggle() {
+#     if [[ status ]]; then
+#         off
+#     else
+#         on
+# }
+
+if [[ $1 = status ]]; then
+    status
+else
+    status
+fi
