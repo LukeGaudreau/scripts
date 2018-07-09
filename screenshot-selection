@@ -1,0 +1,2 @@
+#!/bin/sh
+scrot --silent --select --quality 100 '/home/luke/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S_$wx$h.png' -e 'xclip -selection c -t image/png $f'
