@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 while true; do
-    $HOME/.cloud/scripts/dwm-status
+    ~/.local/bin/dwm-status
     sleep 2
 done &
 
