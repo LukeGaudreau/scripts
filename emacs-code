@@ -1,3 +1,3 @@
 #!/bin/sh
 
-emacsclient -c -e '(spacemacs/home)'
+emacsclient -c -F "((name . \"Home - Spacemacs\"))" -e '(spacemacs/home)'
