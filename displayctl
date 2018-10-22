@@ -64,7 +64,7 @@ class Screen
       solo
     else
       @xrandr.configure(internal.name, scale: "1x1", mode: "#{common_res}", pos: "#{common_res.width}x0")
-      @xrandr.configure(external.name, scale: "1x1", mode: "#{common_res}", pos: "0x0", fb: "#{(common_res.width)}x#{common_res.height} --same-as #{internal.name}")
+      @xrandr.configure(external.name, scale: "2x2", mode: "#{common_res}", pos: "0x0", fb: "#{(common_res.width)}x#{common_res.height} --same-as #{internal.name}")
       puts "Mirroring displays #{internal.name} and #{external.name}."
       @xrandr.apply!
     end
