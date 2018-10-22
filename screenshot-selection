@@ -1,2 +1,5 @@
 #!/bin/sh
-scrot --silent --select --quality 100 '/home/luke/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S_$wx$h.png' -e 'xclip -selection c -t image/png $f'
+FILENAME=/home/luke/Pictures/Screenshots/$(date +%F-%H%M%S).jpg
+echo $FILENAME
+maim --select --hidecursor -b 6 -c .863,.196,.184 $FILENAME
+xclip -selection clipboard -t image/png $FILENAME
