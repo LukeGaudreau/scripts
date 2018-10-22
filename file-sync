@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while true; do
+      inotifywait -r -e modify,attrib,close_write,move,create,delete $HOME/.sync
+      rsync -az --delete --cvs-exclude --stats --human-readable --log-file=$HOME/.rsync.log -e "ssh -i $HOME/.ssh/do" $HOME/.sync/ luke@infosoph.org:.sync/
+done
