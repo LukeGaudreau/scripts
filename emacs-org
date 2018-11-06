@@ -1,3 +1,3 @@
 #!/bin/sh
 
-emacsclient -c -F "((name . \"org-agenda - Org\"))" -e "(org-agenda nil \"T\")"
+emacsclient -c -F "((name . \"org-agenda - Org\"))" -e "(org-agenda nil \"W\")"

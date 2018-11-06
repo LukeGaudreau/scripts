@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-displayctl menu | rofi -dmenu -p "Display Modes" | displayctl
-hsetroot -cover ~/.cloud/Pictures/Wallpapers/colortiles.jpg
+displayctl menu | rofi -dmenu -p "" | displayctl
+feh --bg-scale ~/.dotfiles/wallpaper.jpg
+kill -SIGKILL `pgrep dwm`

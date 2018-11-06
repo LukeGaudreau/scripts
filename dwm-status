@@ -7,10 +7,9 @@
 # The MIT License (MIT) http://opensource.org/licenses/MIT
 
 org(){
-    org="$(emacsclient -e "
-(when (bound-and-true-p org-clock-current-task)
-         (string-trim (substring-no-properties (org-clock-get-clock-string)))))"
-)"
+    org="$(emacsclient -e '
+    (when (bound-and-true-p org-clock-current-task)
+         (concat"  " (string-trim (substring-no-properties (org-clock-get-clock-string))))))')"
     echo $org | sed 's/^nil$//g; s/["()\[]//g' | sed 's/\]/ -/g'
  }
 
@@ -18,36 +17,29 @@ net(){
     wifi="$(wifi)"
     vpn="$(vpn status)"
     if [[ $vpn ]]; then
-        printf "%b" "\x04 $wifi\x01"
+        printf "%b" " $wifi"
     else
-        printf "%b" "\x05 $wifi\x01"
+        printf "%b" " $wifi"
     fi
 }
 vol(){
     vol="$(pamixer --get-volume)"
     mute="$(pamixer --get-mute)"
     if $mute; then
-        printf "%b" "\x03 --\x01"
+        printf "%b" " "
     else
-        printf "%b" "\x06 $vol\x01"
+        printf "%b" " $vol"
     fi
 }
 bat(){
     onl="$(</sys/class/power_supply/ADP1/online)"
     charge="$(</sys/class/power_supply/BAT0/capacity)"
-    if [[ $onl -eq 0 && $charge -ge 15 ]]; then
-        printf "%b" "\x04 $charge%\x01"
-    elif [[ $onl -eq 0 && $charge -le 14 ]]; then
-        printf "%b" "\x03 $charge%\x01"
+    if [[ $onl -eq 0 ]]; then
+        printf "%b" " $charge%"
     else
-        printf "%b" "\x04 $charge%\x01"
+        printf "%b" " $charge%"
     fi
 }
 
-dte(){
-    dte="$(date "+%a, %b %e %l:%M %p")"
-    printf "%b" "\x02$dte\x01"
-}
-
 # Pipe to status bar
-xsetroot -name "$(org)$(vol)$(bat)$(net)$(dte)     "
+xsetroot -name "$(org) $(vol) $(net) $(bat)"

@@ -1,0 +1,1 @@
+emacsclient -c -F "((name . \"Agenda\")(width . 100)(height . 20))" -e "(org-agenda nil \"T\")"
