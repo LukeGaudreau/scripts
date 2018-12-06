@@ -1,12 +1,12 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 while true; do
-    ~/.local/bin/dwm-status
+    ~/bin/dwm-status
     sleep 2
 done &
 
 while true; do
-	  dwm >/dev/null
+	  /usr/local/bin/dwm >/dev/null
 	  # to log stderrors to a file
 	  #dwm 2> ~/.dwm.log
 done
