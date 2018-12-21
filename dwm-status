@@ -1,17 +1,11 @@
-#!/usr/bin/env bash
-# Status script for dwm
-# colours: 01:normal 02:white 03:red 04:green 05:yellow 06:blue
-# 07:cyan 08:magenta 09:grey
+#!/bin/sh
 
-# Copyright (c) 2013-2017 Jason W Ryan
-# The MIT License (MIT) http://opensource.org/licenses/MIT
-
-org(){
-    org="$(emacsclient -e '
-    (when (bound-and-true-p org-clock-current-task)
-         (concat"  " (string-trim (substring-no-properties (org-clock-get-clock-string))))))')"
-    echo $org | sed 's/^nil$//g; s/["()\[]//g' | sed 's/\]/ -/g'
- }
+#org(){
+#    org="$(emacsclient -e '
+#    (when (bound-and-true-p org-clock-current-task)
+#         (concat"  " (string-trim (substring-no-properties (org-clock-get-clock-string))))))')"
+#    echo $org | sed 's/^nil$//g; s/["()\[]//g' | sed 's/\]/ -/g'
+# }
 
 net(){
     wifi="$(wifi)"
@@ -23,9 +17,9 @@ net(){
     fi
 }
 vol(){
-    vol="$(pamixer --get-volume)"
-    mute="$(pamixer --get-mute)"
-    if $mute; then
+    vol="$(volume level)"
+    mute="$(volume status)"
+    if [ "$mute" = "yes" ] ; then
         printf "%b" " "
     else
         printf "%b" " $vol"
@@ -40,6 +34,10 @@ bat(){
         printf "%b" " $charge%"
     fi
 }
+dte(){
+   dte="$(date "+%a %l:%M %p")"
+   printf "%b" "$dte"
+}
 
 # Pipe to status bar
-xsetroot -name "$(org) $(vol) $(net) $(bat)"
+xsetroot -name "$(net) $(bat) $(vol) $(dte)"

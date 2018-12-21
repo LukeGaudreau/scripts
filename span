@@ -1,0 +1,46 @@
+#!/bin/ksh
+XRANDR=$(xrandr)
+INTERNAL="eDP-1"
+INTERNAL_W="2880"
+INTERNAL_H="1800" 
+EXTERNAL=$(echo "$XRANDR" | awk '$2 == "connected" && !/primary/ {print $1}')
+
+if test "$EXTERNAL"; then
+	EXTERNAL_W=$(echo "$XRANDR" | awk -v e="^$EXTERNAL" ' $0 ~ e {getline; sub(/x/," "); print $1}')
+	EXTERNAL_H=$(echo "$XRANDR" | awk -v e="^$EXTERNAL" ' $0 ~ e {getline; sub(/x/," "); print $2}')
+fi
+
+scale() {
+	if [ "$INTERNAL_W" -eq "$EXTERNAL_W" ]; then
+		echo 1
+	elif [ "$INTERNAL_W" -gt "$EXTERNAL_W" ]; then
+		echo 1.5
+	elif [ "$INTERNAL_W" -lt "$EXTERNAL_W" ]; then
+		echo 0.5
+	fi
+}
+offset() {
+	(( offset = $EXTERNAL_W * $(scale) ))
+	echo $offset
+}
+span_w() {
+	(( span = $(offset) + $INTERNAL_W ))
+	echo $span
+}
+span_h() {
+	if [ "$EXTERNAL_H" -gt "$INTERNAL_H" ]; then
+		echo "$EXTERNAL_H"
+	else
+		echo "$INTERNAL_H"
+	fi
+}
+main() {
+	if test ! "$EXTERNAL"; then
+		xrandr --auto
+		xsetroot -name "No external display connected.";
+	else
+		xrandr --output "$INTERNAL" --scale 1x1 --primary --mode "$INTERNAL_W"x"$INTERNAL_H" --pos "$(offset)"x0 --output "$EXTERNAL" --scale "$(scale)"x"$(scale)" --auto --pos 0x0 --fb "$(span_w)"x"$(span_h)"
+		xsetroot -name "Spanning displays $INTERNAL and $EXTERNAL."
+	fi
+}
+main

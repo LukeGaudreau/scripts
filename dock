@@ -1,0 +1,4 @@
+#!/bin/sh
+span
+feh --bg-scale ~/.wallpaper.jpg
+pkill -HUP dwm

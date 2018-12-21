@@ -1,7 +1,7 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 while true; do
-    ~/.local/bin/dwm-status
+    ~/bin/dwm-status
     sleep 2
 done &
 

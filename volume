@@ -1,0 +1,28 @@
+#!/bin/sh
+
+up() {
+    pactl set-sink-volume 0 +5%
+}
+
+down() {
+    pactl set-sink-volume 0 -5%
+}
+status() {
+    pactl list sinks |  awk '/Mute/ {sub(/%/,""); print $2}'
+}
+level() {
+    pactl list sinks |  awk '/Volume/ && !/Base/ {sub(/%/,""); print $5}'
+}
+
+toggle() {
+    pactl set-sink-mute 0 toggle
+}
+    
+case "$1" in
+  up) up ;;
+  down) down ;;
+  level) level ;;
+  status) status ;;
+  toggle) toggle ;;
+  *) level ;;
+esac

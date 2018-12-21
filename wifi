@@ -3,7 +3,7 @@
 # wifi activation
 
 status() {
-    nmcli -f NAME con show --active | grep -v "NAME\|BC" | head -n1
+    nmcli -f NAME con show --active | grep -v "NAME\\|BC" | head -n1
 }
 
 # toggle() {

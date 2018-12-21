@@ -1,0 +1,3 @@
+#!/bin/sh
+
+qemu-system-x86_64 -enable-kvm -m 2048 -nic user,model=virtio -drive file=disks/alpine.qcow2,media=disk,if=virtio -cdrom media/alpine-standard-3.8.1-x86_64.iso -vga virtio
